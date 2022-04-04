@@ -23,6 +23,11 @@ import { supported, next, nextNext, deprecated } from '../../lib/enterprise-serv
 import { getLiquidConditionals } from '../../script/helpers/get-liquid-conditionals.js'
 import allowedVersionOperators from '../../lib/liquid-tags/ifversion-supported-operators.js'
 import semver from 'semver'
+import { jest } from '@jest/globals'
+import { getDiffFiles } from '../helpers/diff-files.js'
+import loadSiteData from '../../lib/site-data.js'
+
+jest.useFakeTimers('legacy')
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const enterpriseServerVersions = Object.keys(allVersions).filter((v) =>
@@ -173,6 +178,28 @@ const oldOcticonRegex = /{{\s*?octicon-([a-z-]+)(\s[\w\s\d-]+)?\s*?}}/g
 //
 const oldExtendedMarkdownRegex = /{{\s*?[#/][a-z-]+\s*?}}/g
 
+// GitHub-owned actions (e.g. actions/checkout@v2) should use a reusable in examples.
+// list:
+// - actions/checkout@v2
+// - actions/delete-package-versions@v2
+// - actions/download-artifact@v2
+// - actions/upload-artifact@v2
+// - actions/github-script@v2
+// - actions/setup-dotnet@v2
+// - actions/setup-go@v2
+// - actions/setup-java@v2
+// - actions/setup-node@v2
+// - actions/setup-python@v2
+// - actions/stale@v2
+// - actions/cache@v2
+// - github/codeql-action/init@v2
+// - github/codeql-action/analyze@v2
+// - github/codeql-action/autobuild@v2
+// - github/codeql-action/upload-sarif@v2
+//
+const literalActionInsteadOfReusableRegex =
+  /(actions\/(checkout|delete-package-versions|download-artifact|upload-artifact|github-script|setup-dotnet|setup-go|setup-java|setup-node|setup-python|stale|cache)|github\/codeql-action[/a-zA-Z-]*)@v\d+/g
+
 // Strings in Liquid will always evaluate true _because_ they are strings; instead use unquoted variables, like {% if foo %}.
 // - {% if "foo" %}
 // - {% unless "bar" %}
@@ -194,6 +221,8 @@ const oldExtendedMarkdownErrorText =
   'Found extended markdown tags with the old {{#note}} syntax. Use {% note %}/{% endnote %} instead!'
 const stringInLiquidErrorText =
   'Found Liquid conditionals that evaluate a string instead of a variable. Remove the quotes around the variable!'
+const literalActionInsteadOfReusableErrorText =
+  'Found a literal mention of a GitHub-owned action. Instead, use the reusables for the action. e.g {% data reusables.actions.action-checkout %}'
 
 const mdWalkOptions = {
   globs: ['**/*.md'],
@@ -277,14 +306,15 @@ if (!process.env.TEST_TRANSLATION) {
 } else {
   // get all translated markdown or yaml files by comparing files changed to main branch
   const changedFilesRelPaths = execSync(
-    'git -c diff.renameLimit=10000 diff --name-only origin/main | egrep "^translations/.*/.+.(yml|md)$"',
+    'git -c diff.renameLimit=10000 diff --name-only origin/main',
     { maxBuffer: 1024 * 1024 * 100 }
   )
     .toString()
     .split('\n')
-  if (changedFilesRelPaths === '') process.exit(0)
+    .filter((p) => p.startsWith('translations') && (p.endsWith('.md') || p.endsWith('.yml')))
 
-  console.log('testing translations.')
+  // If there are no changed files, there's nothing to lint: signal a successful termination.
+  if (changedFilesRelPaths.length === 0) process.exit(0)
 
   console.log(`Found ${changedFilesRelPaths.length} translated files.`)
 
@@ -356,20 +386,10 @@ function getContent(content) {
   return null
 }
 
-// Filter out entries from an array like this:
-//
-//    [
-//      [relativePath, absolutePath],
-//      ...
-// so it's only the files mentioned in the DIFF_FILES environment
-// variable, but only if it's set and present.
+const diffFiles = getDiffFiles()
 
-// Setting an environment varible called `DIFF_FILES` is optional.
-// But if and only if it's set, we will respect it.
-// And if it set, turn it into a cleaned up Set so it's made available
-// every time we use it.
-if (process.env.DIFF_FILES) {
-  // Parse and turn that environment variable string into a set.
+// If present, and not empty, leverage it because in most cases it's empty.
+if (diffFiles.length > 0) {
   // It's faster to do this once and then re-use over and over in the
   // .filter() later on.
   const only = new Set(
@@ -377,7 +397,7 @@ if (process.env.DIFF_FILES) {
     // with quotation marks, strip them.
     // E.g. Turn `"foo" "bar"` into ['foo', 'bar']
     // Note, this assumes no possible file contains a space.
-    process.env.DIFF_FILES.split(/\s+/g).map((name) => {
+    diffFiles.map((name) => {
       if (/^['"]/.test(name) && /['"]$/.test(name)) {
         return name.slice(1, -1)
       }
@@ -415,6 +435,9 @@ if (
 
 describe('lint markdown content', () => {
   if (mdToLint.length < 1) return
+
+  const siteData = loadSiteData()
+
   describe.each(mdToLint)('%s', (markdownRelPath, markdownAbsPath) => {
     let content,
       ast,
@@ -458,12 +481,14 @@ describe('lint markdown content', () => {
         }
       })
 
+      const context = { site: siteData.en.site }
+
       // visit is not async-friendly so we need to do an async map to parse the YML snippets
       yamlScheduledWorkflows = (
         await Promise.all(
           yamlScheduledWorkflows.map(async (snippet) => {
             // If we don't parse the Liquid first, yaml loading chokes on {% raw %} tags
-            const rendered = await renderContent.liquid.parseAndRender(snippet)
+            const rendered = await renderContent.liquid.parseAndRender(snippet, context)
             const parsed = yaml.load(rendered)
             return parsed.on.schedule
           })
@@ -672,6 +697,14 @@ ${ifsForVersioning.join('\n')}`
         }
       })
     }
+
+    if (!markdownRelPath.includes('data/reusables/actions/action-')) {
+      test('must not contain literal GitHub-owned actions', async () => {
+        const matches = content.match(literalActionInsteadOfReusableRegex) || []
+        const errorMessage = formatLinkError(literalActionInsteadOfReusableErrorText, matches)
+        expect(matches.length, errorMessage).toBe(0)
+      })
+    }
   })
 })
 
@@ -679,16 +712,28 @@ describe('lint yaml content', () => {
   if (ymlToLint.length < 1) return
   describe.each(ymlToLint)('%s', (yamlRelPath, yamlAbsPath) => {
     let dictionary, isEarlyAccess, ifversionConditionals, ifConditionals
+    // This variable is used to determine if the file was parsed successfully.
+    // When `yaml.load()` fails to parse the file, it is overwritten with the error message.
+    // `false` is intentionally chosen since `null` and `undefined` are valid return values.
+    let dictionaryError = false
 
     beforeAll(async () => {
       const fileContents = await readFileAsync(yamlAbsPath, 'utf8')
-      dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      try {
+        dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      } catch (error) {
+        dictionaryError = error
+      }
 
       isEarlyAccess = yamlRelPath.split('/').includes('early-access')
 
       ifversionConditionals = getLiquidConditionals(fileContents, ['ifversion', 'elsif'])
 
       ifConditionals = getLiquidConditionals(fileContents, 'if')
+    })
+
+    test('it can be parsed as a single yaml document', () => {
+      expect(dictionaryError).toBe(false)
     })
 
     test('ifversion conditionals are valid in yaml', async () => {
@@ -907,10 +952,19 @@ describe('lint GHES release notes', () => {
   if (ghesReleaseNotesToLint.length < 1) return
   describe.each(ghesReleaseNotesToLint)('%s', (yamlRelPath, yamlAbsPath) => {
     let dictionary
+    let dictionaryError = false
 
     beforeAll(async () => {
       const fileContents = await readFileAsync(yamlAbsPath, 'utf8')
-      dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      try {
+        dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      } catch (error) {
+        dictionaryError = error
+      }
+    })
+
+    it('can be parsed as a single yaml document', () => {
+      expect(dictionaryError).toBe(false)
     })
 
     it('matches the schema', () => {
@@ -954,10 +1008,19 @@ describe('lint GHAE release notes', () => {
   const currentWeeksFound = []
   describe.each(ghaeReleaseNotesToLint)('%s', (yamlRelPath, yamlAbsPath) => {
     let dictionary
+    let dictionaryError = false
 
     beforeAll(async () => {
       const fileContents = await readFileAsync(yamlAbsPath, 'utf8')
-      dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      try {
+        dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      } catch (error) {
+        dictionaryError = error
+      }
+    })
+
+    it('can be parsed as a single yaml document', () => {
+      expect(dictionaryError).toBe(false)
     })
 
     it('matches the schema', () => {
@@ -1006,12 +1069,24 @@ describe('lint GHAE release notes', () => {
 
 describe('lint learning tracks', () => {
   if (learningTracksToLint.length < 1) return
+
+  const siteData = loadSiteData()
+
   describe.each(learningTracksToLint)('%s', (yamlRelPath, yamlAbsPath) => {
     let dictionary
+    let dictionaryError = false
 
     beforeAll(async () => {
       const fileContents = await readFileAsync(yamlAbsPath, 'utf8')
-      dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      try {
+        dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      } catch (error) {
+        dictionaryError = error
+      }
+    })
+
+    it('can be parsed as a single yaml document', () => {
+      expect(dictionaryError).toBe(false)
     })
 
     it('matches the schema', () => {
@@ -1032,7 +1107,7 @@ describe('lint learning tracks', () => {
       const productVersions = getApplicableVersions(data.versions, productTocPath)
 
       const featuredTracks = {}
-      const context = { enterpriseServerVersions }
+      const context = { enterpriseServerVersions, site: siteData.en.site }
 
       // For each of the product's versions, render the learning track data and look for a featured track.
       await Promise.all(
@@ -1083,10 +1158,19 @@ describe('lint feature versions', () => {
   if (featureVersionsToLint.length < 1) return
   describe.each(featureVersionsToLint)('%s', (yamlRelPath, yamlAbsPath) => {
     let dictionary
+    let dictionaryError = false
 
     beforeAll(async () => {
       const fileContents = await readFileAsync(yamlAbsPath, 'utf8')
-      dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      try {
+        dictionary = yaml.load(fileContents, { filename: yamlRelPath })
+      } catch (error) {
+        dictionaryError = error
+      }
+    })
+
+    it('can be parsed as a single yaml document', () => {
+      expect(dictionaryError).toBe(false)
     })
 
     it('matches the schema', () => {

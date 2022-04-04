@@ -1,8 +1,8 @@
-import { getDOM } from '../helpers/supertest.js'
+import { getDOM } from '../helpers/e2etest.js'
 import languages from '../../lib/languages.js'
 import { jest } from '@jest/globals'
 
-jest.useFakeTimers()
+jest.useFakeTimers('legacy')
 
 describe('<head>', () => {
   jest.setTimeout(5 * 60 * 1000)

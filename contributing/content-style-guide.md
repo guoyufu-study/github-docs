@@ -102,11 +102,11 @@ In YAML examples, such as actions and workflow files, use two spaces to indent l
 
 ```yaml
     steps:
-      - uses: actions/checkout@v2
+      - uses: {% data reusables.actions.action-checkout %}
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: {% data reusables.actions.action-setup-python %}
         with:
-          python-version: ${{ matrix.python }}
+          python-version: {% raw %}${{ matrix.python }}{% endraw %}
 ```
 
 ### Scheduled workflows
@@ -128,7 +128,7 @@ To orient readers and help them understand if the section is relevant to them, i
 
 ### Alt text
 
-Every image must include an alt attribute that provides a complete description of the image for the user. For more information, see “[Accessibility guidelines for images and videos](https://review.docs.microsoft.com/en-us/help/contribute/contribute-accessibility-multimedia)” in the Microsoft Docs Contributor Guide.
+Every image must include an alt attribute that provides a complete description of the image for the user. For more information, see “[Accessibility guidelines for images and videos](https://review.docs.microsoft.com/en-us/help/contribute/contribute-accessibility-multimedia)” in the Microsoft Docs Contributor Guide. Note that you'll need to be logged on to your Microsoft account to be able access this Microsoft resource.
 
 ### Filenames
 
@@ -169,6 +169,60 @@ More resources for learning about inclusive and accessible language and style:
   - [Writing for Accessibility](https://styleguide.mailchimp.com/writing-for-accessibility/)
 - [Readability Guidelines](https://readabilityguidelines.co.uk/)
 - [Conscious Style Guide](https://consciousstyleguide.com/)
+
+## Keyboard shortcuts
+
+For presenting keyboard shortcuts, follow the [Microsoft Style Guide](https://docs.microsoft.com/en-us/style-guide/a-z-word-list-term-collections/term-collections/keys-keyboard-shortcuts), **except for the following differences**:
+
+- Use the HTML `<kbd>` tag for each individual key.
+
+  - **Use:** `<kbd>Command</kbd>+<kbd>B</kbd>`
+  - **Avoid:** `Command+B`
+- Use full words instead of symbols for Apple modifier keys.
+
+  - **Use:** `Command`
+  - **Avoid:** `⌘`
+- Use symbols for keys of special character, not full words.
+
+  - **Use:** `.`, `,`, and `→`.
+  - **Avoid:** `Period`, `Comma`, and `Right arrow`.
+
+### Usage highlights
+
+Below are some usage highlights for how we present keyboard shortcuts in our documentation:
+
+- The basic syntax is to show keys with `+` between key combinations, without any spaces.
+
+  - **Use:** `<kbd>Command</kbd>+<kbd>B</kbd>`, which is rendered as <kbd>Command</kbd>+<kbd>B</kbd>.
+  - **Avoid:** `<kbd>Command</kbd> + <kbd>B</kbd>` or `<kbd>Command + B</kbd>` which are  rendered as <kbd>Command</kbd> + <kbd>B</kbd> or <kbd>Command + B</kbd>.
+- Always capitalize letter keys for general references and keyboard shortcuts.
+
+  - **Use:** <kbd>Command</kbd>+<kbd>B</kbd>
+  - **Avoid:** <kbd>Command</kbd>+<kbd>b</kbd>.
+- Use the correct modifier keys for the each operating system.
+
+  **Note:** Windows and Linux have <kbd>Ctrl</kbd> abbreviated, whereas on Mac it is spelled in full: <kbd>Control</kbd>.
+
+  - For Windows and Linux:
+  
+    - **Use:** <kbd>Ctrl</kbd>, <kbd>Alt</kbd>.
+    - **Avoid:** <kbd>Control</kbd>
+  - For Mac:
+  
+    - **Use:** <kbd>Command</kbd>, <kbd>Option</kbd>, <kbd>Control</kbd>.
+    - **Avoid:** <kbd>Cmd</kbd>, <kbd>⌘</kbd>, <kbd>Opt</kbd>, <kbd>⌥</kbd>, <kbd>Ctrl</kbd>, <kbd>⌃</kbd>
+- Don't confuse key combinations with keys in a sequence.
+
+  - <kbd>Command</kbd>+<kbd>B</kbd> indicates that the user should hold down the <kbd>Command</kbd> key and press the <kbd>B</kbd> key.
+  - <kbd>G</kbd> <kbd>I</kbd> indicates that the user should press the <kbd>G</kbd> key, then press the <kbd>I</kbd> key.
+- When describing a keyboard shortcut for multiple operating systems, append the operating system in brackets after the shortcut. Describe the Mac shortcut first, then Windows/Linux.
+
+  - **Use:** `<kbd>Command</kbd>+<kbd>B</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>B</kbd> (Windows/Linux)`, presented as:
+  
+     <kbd>Command</kbd>+<kbd>B</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>B</kbd> (Windows / Linux)
+  - **Avoid:** `<kbd>Ctrl</kbd>+<kbd>B</kbd> or <kbd>Command</kbd>+<kbd>B</kbd>`, presented as:
+
+    <kbd>Ctrl</kbd>+<kbd>B</kbd> or <kbd>Command</kbd>+<kbd>B</kbd>
 
 ## Linebreaks
 
@@ -268,6 +322,7 @@ Take care to distinguish between product names and product elements. For more in
 | Product | Element |
 | --- | --- |
 | GitHub Actions | an action |
+| GitHub Codespaces | a codespace |
 | GitHub Packages | a package |
 | GitHub Pages | a GitHub Pages site |
 
@@ -276,6 +331,27 @@ Take care to distinguish between product names and product elements. For more in
 This section describes additional conventions that are specific to GitHub products. 
 
 ### GitHub Actions
+
+#### Reusables for first-party actions
+
+Code examples that use first-party actions must use the respective reusable for that action. This makes action version updates (e.g from `v1` to `v2`) easier to manage for products like GitHub Enterprise Server, which might not have the same action version available until a future Enterprise Server release.
+
+Action reusables are located in `/data/reusables/actions/` and have a filename like `action-<action_name>.md`
+
+For example, to use the `actions/checkout` action in an example, use its reusable:
+
+```yaml
+steps:
+  - name: Checkout
+    uses: {% data reusables.actions.action-checkout %}
+```
+
+For GitHub Docs purposes, a first-party action is any action that has the `actions/`, `github/` or `octo-org/` prefix. For example, this is a first-party action:
+
+```
+steps:
+  - uses: actions/checkout@main
+```
 
 #### Disclaimers for third-party actions
 
@@ -297,7 +373,7 @@ For GitHub Docs purposes, a third-party action is any action that doesn't have t
 
 ```
 steps:
-  - uses: actions/javascript-action@main
+  - uses: actions/checkout@main
 ```
 
 This is an example of a third-party action:
@@ -310,7 +386,7 @@ steps:
 Examples:
 - See the code block in "[Publishing to package registries](https://docs.github.com/en/actions/guides/building-and-testing-python#publishing-to-package-registries)"
 
-### Pinning version numbers to SHA
+#### Pinning version numbers to SHA
 
 Code examples that use third-party actions must always pin to a full length commit SHA, instead of the version number or branch:
 
@@ -327,6 +403,14 @@ steps:
 ```
 
 For more information, see "[Using SHAs](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions#using-shas)"
+
+### GitHub Codespaces 
+
+Always use "GitHub Codespaces" (`{% data variables.product.prodname_github_codespaces %}`) as the product name, not just "Codespaces". This helps to avoid confusion with "codespaces" (lowercase c), which refers to instances of remote coding workspaces created with GitHub Codespaces.
+
+Always use "dev container" (or, where clarification is needed, its longer form "development container") and not "devcontainer" (one word), except in file/path names. The single word could form could be considered a brand, which we want to avoid, and we also want to be consistent with the two-word form used in [the Visual Studio Code documentation](https://code.visualstudio.com/docs/remote/create-dev-container#_path-to-creating-a-dev-container).
+
+Use "development container configuration files" to refer to all of the files in the `.devcontainer` directory (plus the `.devcontainer.json` if that's being used rather than `devcontainer.json` in the `.devcontainer` directory). Don't refer to these as "development container files" or "devcontainer files" to avoid this being taken as referring to `devcontainer.json` files. "Development container configuration files" refers to all of the files that can be used to configure a dev container, including `Dockerfile` and `docker-compose.yml` files. Don't use "the development container configuration file" (singular) when referring specifically to a `devcontainer.json` file. Instead refer to this file by its name.
 
 ## Punctuation
 
@@ -394,15 +478,16 @@ Format checkbox names in bold and omit the word “checkbox.” To describe choo
 - **Use:** Select **Enable for all new repositories**.
 - **Avoid:** Check the “Enable for all new repositories” checkbox.
 
-### Drop-down menus
-
-Format drop-down menus in regular text and format clickable items within a menu in bold. Select drop-down menus (regardless of whether the menu name is a word or an octicon), and click their menu items.
-- **Use:** Select the Backup email addresses drop-down menu and click **Only allow primary email**.
-
 ### Dynamic text
 
 Use capital letters to indicate text that changes in the user interface or that the user needs to supply in a command or code snippet.
 - **Use:** Click **Add USERNAME to REPONAME**.
+
+### Lists and list items
+
+Format lists and clickable list items in bold. To describe interacting with a list, such as a dropdown menu or UI element that expands, regardless of whether the list name is a word or an octicon, write "select." To describe choosing a list item, write "click."
+- **Use:** Select the **Backup email addresses** dropdown menu and click **Only allow primary email**.
+- **Avoid:** Click the "Backup email addresses" dropdown menu and click **Only allow primary email**.
 
 ### Location
 
@@ -539,7 +624,7 @@ Avoid ending a sentence with a preposition unless the rewritten sentence would s
 
 ### Product names
 
-See the “Product names” section of this guide.
+See the “[Product names](#product-names)” section of this guide.
 
 ### Terms to use or avoid
 

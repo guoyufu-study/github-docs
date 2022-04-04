@@ -1,12 +1,11 @@
 ---
 title: Convidar pessoas para gerenciar sua empresa
 intro: 'Você pode {% ifversion ghec %}convidar pessoas para se tornarem proprietários corporativos ou gerentes de cobrança para{% elsif ghes %}adicionar proprietários corporativos à conta corporativa{% endif %}. Você também pode remover proprietários corporativos {% ifversion ghec %}ou gerentes de cobrança {% endif %}que não precisam mais de acesso à conta corporativa.'
-product: '{% data reusables.gated-features.enterprise-accounts %}'
 permissions: 'Enterprise owners can {% ifversion ghec %}invite other people to become{% elsif ghes %}add{% endif %} additional enterprise administrators.'
 redirect_from:
   - /github/setting-up-and-managing-your-enterprise/managing-users-in-your-enterprise/inviting-people-to-manage-your-enterprise
   - /github/setting-up-and-managing-your-enterprise-account/inviting-people-to-manage-your-enterprise-account
-  - /articles/inviting-people-to-collaborate-in-your-business-account/
+  - /articles/inviting-people-to-collaborate-in-your-business-account
   - /articles/inviting-people-to-manage-your-enterprise-account
   - /github/setting-up-and-managing-your-enterprise/inviting-people-to-manage-your-enterprise
 versions:
@@ -48,7 +47,7 @@ Se sua empresa usa {% data variables.product.prodname_emus %}, os proprietários
 
 {% data reusables.enterprise-accounts.access-enterprise %}
 {% data reusables.enterprise-accounts.people-tab %}
-1. Na barra lateral esquerda, clique em **Administrators** (Administradores). ![Aba Administrators (Administradores) na barra lateral esquerda](/assets/images/help/business-accounts/administrators-tab.png)
+{% data reusables.enterprise-accounts.administrators-tab %}
 1. Acima da lista de administradores, clique em {% ifversion ghec %}**Convidar administrador**{% elsif ghes %}**Add proprietário**{% endif %}.
   {% ifversion ghec %}
   ![Botão "Convidar administrador" acima da lista de proprietários corporativos](/assets/images/help/business-accounts/invite-admin-button.png)
@@ -66,10 +65,11 @@ Somente proprietários corporativos podem remover outros administradores corpora
 
 {% data reusables.enterprise-accounts.access-enterprise %}
 {% data reusables.enterprise-accounts.people-tab %}
-1. Ao lado do nome de usuário da pessoa que você deseja remover, clique em {% octicon "gear" aria-label="The Settings gear" %} e, em seguida, clique em **Remover proprietário**{% ifversion ghec %} ou **Remover gerente de cobrança**{% endif %}.
+{% data reusables.enterprise-accounts.administrators-tab %}
+1. Ao lado do nome de usuário da pessoa que você deseja remover, clique em {% octicon "gear" aria-label="The Settings gear" %} e, em seguida, clique em {% ifversion ghes %}**Remover o proprietário**{% elsif ghec %}**Converter em integrante**{% endif %}.
   {% ifversion ghec %}
   ![Ajuste de configurações com menu option (opções) para remover um administrador corporativo](/assets/images/help/business-accounts/remove-admin.png)
   {% elsif ghes %}
   ![Ajuste de configurações com menu option (opções) para remover um administrador corporativo](/assets/images/help/business-accounts/ghes-remove-owner.png)
   {% endif %}
-1. Leia a confirmação, clique **Remover proprietário**{% ifversion ghec %} ou **Remover gerente de cobrança**{% endif %}.
+1. Leia a confirmação e, em seguida, clique em {% ifversion ghes %}**Remover o proprietário**{% elsif ghec %}**Sim, converter nome de usuário em integrante**{% endif %}.

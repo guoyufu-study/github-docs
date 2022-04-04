@@ -21,13 +21,13 @@ hasExperimentalAlternative: true
 
 {% data reusables.actions.enterprise-beta %}
 {% data reusables.actions.enterprise-github-hosted-runners %}
-{% data reusables.actions.ae-beta %}
 
 ## 简介
 
 本指南介绍如何构建、测试和发布 Python 包。
 
-{% ifversion ghae %}有关如何确定 {% data variables.actions.hosted_runner %} 已安装所需软件的说明，请参阅“[创建自定义映像](/actions/using-github-hosted-runners/creating-custom-images)”。
+{% ifversion ghae %}
+{% data reusables.actions.self-hosted-runners-software %}
 {% else %} {% data variables.product.prodname_dotcom %} 托管的运行器有工具缓存预安装的软件，包括 Python 和 PyPy。 您无需安装任何项目！ 有关最新版软件以及 Python 和 PyPy 预安装版本的完整列表，请参阅 [{% data variables.product.prodname_dotcom %} 托管的运行器的规格](/actions/reference/specifications-for-github-hosted-runners/#supported-software)。
 {% endif %}
 
@@ -42,11 +42,11 @@ hasExperimentalAlternative: true
 
 {% data reusables.actions.enterprise-setup-prereq %}
 
-## 从 Python 工作流程模板开始
+## 使用 Python 入门工作流程
 
-{% data variables.product.prodname_dotcom %} 提供有 Python 工作流程模板，应该适用于大多数 Python 项目。 本指南包含可用于自定义模板的示例。 更多信息请参阅 [Python 工作流程模板](https://github.com/actions/starter-workflows/blob/main/ci/python-package.yml)。
+{% data variables.product.prodname_dotcom %} 提供了一个适用于大多数 Python 项目的 Python 入门工作流程。 本指南包含可用于自定义入门工作流程的示例。 更多信息请参阅 [Python 入门工作流程](https://github.com/actions/starter-workflows/blob/main/ci/python-package.yml)。
 
-要快速开始，请将模板添加到仓库的 `.github/workflows` 目录中。
+要快速开始，请将入门工作流程添加到仓库的 `.github/workflows` 目录中。
 
 {% raw %}
 ```yaml{:copy}
@@ -278,42 +278,27 @@ steps:
 
 ### 缓存依赖项
 
-使用 {% data variables.product.prodname_dotcom %} 托管的运行器时，您可以使用唯一密钥缓存 pip 依赖项， 并在使用[`缓存`](https://github.com/marketplace/actions/cache)操作运行未来的工作流程时恢复依赖项。 更多信息请参阅“<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">缓存依赖项以加快工作流程</a>”。
+使用 {% data variables.product.prodname_dotcom %} 托管的运行器时，您可以使用 [`setup-python` 操作](https://github.com/actions/setup-python)缓存和恢复依赖项。
 
-Pip 根据运行器的操作系统将依赖项缓存在不同的位置。 您需要缓存的路径可能不同于下面的 Ubuntu 示例，具体取决于您使用的操作系统。 更多信息请参阅 [Python 缓存示例](https://github.com/actions/cache/blob/main/examples.md#python---pip)。
+以下示例缓存 pip 的依赖项。
 
-{% raw %}
 
 
 ```yaml{:copy}
 steps:
 - uses: actions/checkout@v2
-- name: Setup Python
-  uses: actions/setup-python@v2
+- uses: actions/setup-python@v2
   with:
-    python-version: '3.x'
-- name: Cache pip
-  uses: actions/cache@v2
-  with:
-    # This path is specific to Ubuntu
-    path: ~/.cache/pip
-    # Look to see if there is a cache hit for the corresponding requirements file
-    key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-    restore-keys: |
-      ${{ runner.os }}-pip-
-      ${{ runner.os }}-
-- name: Install dependencies
-  run: pip install -r requirements.txt
+    python-version: '3.9'
+    cache: 'pip'
+- run: pip install -r requirements.txt
+- run: pip test
 ```
 
 
-{% endraw %}
+默认情况下， `setup-python` 操作会在整个存储库中搜索依赖项文件（对于 pip 为`requirements.txt`，对于 pipenv 为 `Pipfile.lock`）。 更多信息请参阅 `setup-python` 操作自述文件中的“<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">缓存包依赖项</a>”。 
 
-{% note %}
-
-**注意：**取决于依赖项的数量，使用依赖项缓存可能会更快。 有很多大型依赖项的项目应该能看到性能明显提升，因为下载所需的时间会缩短。 依赖项较少的项目可能看不到明显的性提升，甚至可能由于pip 安装缓存依赖项的方式而看到性能略有下降。 性能因项目而异。
-
-{% endnote %}
+如果您有自定义要求或需要更精确的缓存控制，则可以使用 [`cache` 操作](https://github.com/marketplace/actions/cache)。 Pip 根据运行器的操作系统将依赖项缓存在不同的位置。 您需要缓存的路径可能不同于上面的 Ubuntu 示例，具体取决于您使用的操作系统。 更多信息请参阅 `cache` 操作存储库中的 [Python 缓存示例](https://github.com/actions/cache/blob/main/examples.md#python---pip)。
 
 
 
@@ -459,7 +444,7 @@ jobs:
       - name: Test with pytest
         run: pytest tests.py --doctest-modules --junitxml=junit/test-results-${{ matrix.python-version }}.xml
       - name: Upload pytest test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: junit/test-results-${{ matrix.python-version }}.xml
@@ -512,4 +497,4 @@ jobs:
 ```
 
 
-有关模板工作流程的更多信息，请参阅 [`python-published`](https://github.com/actions/starter-workflows/blob/main/ci/python-publish.yml)。
+有关入门工作流程的更多信息，请参阅 [`python-published`](https://github.com/actions/starter-workflows/blob/main/ci/python-publish.yml)。

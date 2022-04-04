@@ -4,10 +4,8 @@ intro: API プレビューを使用して新機能を試し、これらの機能
 redirect_from:
   - /v3/previews
 versions:
-  fpt: '*'
   ghes: '*'
   ghae: '*'
-  ghec: '*'
 topics:
   - API
 ---
@@ -118,16 +116,6 @@ API を使用して、プルリクエストに対して[複数の承認レビュ
 
 {% endif %}
 
-
-{% ifversion ghes %}
-
-## リポジトリへの匿名 Git アクセス
-
-{% data variables.product.prodname_ghe_server %} インスタンスがプライベートモードの場合、サイトおよびリポジトリの管理者は、パブリックリポジトリに対して匿名の Git アクセスを有効にすることができます。
-
-**カスタムメディアタイプ:** `x-ray-preview` **発表日:** [2018-07-12](https://blog.github.com/2018-07-12-introducing-enterprise-2-14/)
-
-{% endif %}
 {% ifversion ghes < 3.3 %}
 
 ## プロジェクトカードの詳細
@@ -137,21 +125,12 @@ API を使用して、プルリクエストに対して[複数の承認レビュ
 **カスタムメディアタイプ:** `starfox-preview` **発表日:** [2018-09-05](https://developer.github.com/changes/2018-09-05-project-card-events)
 
 {% endif %}
-{% ifversion fpt or ghec %}
-
-## GitHub App マニフェスト
-
-GitHub App マニフェストを使用すると、事前設された GitHub App を作成できます。 詳細については、「[GitHub App のマニフェスト](/apps/building-github-apps/creating-github-apps-from-a-manifest/)」を参照してください。
-
-**カスタムメディアタイプ:** `fury-preview`
-
-{% endif %}
 
 {% ifversion ghes < 3.3 %}
 
 ## デプロイメントステータス
 
-[デプロイメントステータス](/rest/reference/repos#create-a-deployment-status)の`環境`を更新し、`in_progress` および `queued` ステータスを使用できるようになりました。 デプロイメントステータスを作成するときに、`auto_inactive` パラメータを使用して、古い`本番`デプロイメントを `inactive` としてマークできるようになりました。
+[デプロイメントステータス](/rest/reference/deployments#create-a-deployment-status)の`環境`を更新し、`in_progress` および `queued` ステータスを使用できるようになりました。 デプロイメントステータスを作成するときに、`auto_inactive` パラメータを使用して、古い`本番`デプロイメントを `inactive` としてマークできるようになりました。
 
 **カスタムメディアタイプ:** `flash-preview` **発表日:** [2018-10-16](https://developer.github.com/changes/2018-10-16-deployments-environments-states-and-auto-inactive-updates/)
 
@@ -167,13 +146,15 @@ Organization メンバーによるリポジトリの作成可否、および作�
 
 {% endif %}
 
+{% ifversion ghes < 3.4 %}
 ## コンテンツの添付
 
 {% data variables.product.prodname_unfurls %} API を使用して、登録されたドメインにリンクする URL の詳細情報を GitHub で提供できるようになりました。 詳細については、「[添付コンテンツを使用する](/apps/using-content-attachments/)」を参照してください。
 
 **カスタムメディアタイプ:** `corsair-preview` **発表日:** [2018-12-10](https://developer.github.com/changes/2018-12-10-content-attachments-api/)
 
-{% ifversion ghes < 3.3 %}
+{% endif %}
+{% ifversion ghae or ghes < 3.3 %}
 
 ## Pages の有効化と無効化
 

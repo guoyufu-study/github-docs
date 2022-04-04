@@ -21,13 +21,11 @@ shortTitle: 安全日志
 
 安全日志列出了过去 90 天内执行的所有操作。
 
-{% data reusables.user_settings.access_settings %}
-{% ifversion fpt or ghae or ghes or ghec %}
-2. 在用户设置侧边栏中，单击 **Security log（安全日志）**。 ![安全日志选项卡](/assets/images/help/settings/audit-log-tab.png)
+{% data reusables.user-settings.access_settings %}
+{% ifversion fpt or ghec or ghes > 3.4 or ghae-issue-5658 %}
+1. 在边栏的“Archives（存档）”部分中，单击 **{% octicon "log" aria-label="The log icon" %} 安全日志**。
 {% else %}
-{% data reusables.user_settings.security %}
-3. 在“Security history（安全历史记录）”下，将显示您的日志。 ![安全日志](/assets/images/help/settings/user_security_log.png)
-4. 单击条目以查看有关该事件的更多信息。 ![安全日志](/assets/images/help/settings/user_security_history_action.png)
+1. 在用户设置侧边栏中，单击 **Security log（安全日志）**。 ![安全日志选项卡](/assets/images/help/settings/audit-log-tab.png)
 {% endif %}
 
 {% ifversion fpt or ghae or ghes or ghec %}
@@ -44,7 +42,6 @@ shortTitle: 安全日志
 
 | 类别名称                                                                                   | 描述                                                                                                                                                                                                                                                                                                               |
 | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |{% ifversion fpt or ghec %}
-| [`account_recovery_token`](#account_recovery_token-category-actions)                   | 包含与[添加恢复令牌](/articles/configuring-two-factor-authentication-recovery-methods)相关的所有活动。                                                                                                                                                                                                                            |
 | [`计费，帐单`](#billing-category-actions)                                                   | 包含与帐单信息相关的所有活动。                                                                                                                                                                                                                                                                                                  |
 | [`codespaces`](#codespaces-category-actions)                                           | 包含与 {% data variables.product.prodname_codespaces %} 相关的所有活动。 更多信息请参阅“[关于 {% data variables.product.prodname_codespaces %}](/github/developing-online-with-codespaces/about-codespaces)”。                                                                                                                        |
 | [`marketplace_agreement_signature`](#marketplace_agreement_signature-category-actions) | 包含与签署 {% data variables.product.prodname_marketplace %} 开发者协议相关的所有活动。                                                                                                                                                                                                                                            |
@@ -74,14 +71,6 @@ shortTitle: 安全日志
 安全日志中记录为事件的一些最常见操作的概述。
 
 {% ifversion fpt or ghec %}
-
-### `account_recovery_token` 类操作
-
-| 操作              | 描述                                                                                        |
-| --------------- | ----------------------------------------------------------------------------------------- |
-| `confirm`       | 当您成功[使用恢复提供程序存储新令牌](/articles/configuring-two-factor-authentication-recovery-methods)时触发。 |
-| `recover`       | 当您成功[取回帐户恢复令牌](/articles/recovering-your-account-if-you-lose-your-2fa-credentials)时触发。    |
-| `recover_error` | 当 {% data variables.product.prodname_dotcom %} 无法验证所使用的令牌时触发。                             |
 
 ### `billing` 类操作
 
@@ -129,11 +118,10 @@ shortTitle: 安全日志
 
 ### `payment_method` 类操作
 
-| 操作       | 描述                                                     |
-| -------- | ------------------------------------------------------ |
-| `clear`  | 当存档的[付款方式](/articles/removing-a-payment-method)被删除时触发。 |
-| `create` | 在添加新的付款方式（例如新的信用卡或 PayPal 帐户）时触发。                      |
-| `update` | 当现有付款方式被更新时触发。                                         |
+| 操作       | 描述                                |
+| -------- | --------------------------------- |
+| `create` | 在添加新的付款方式（例如新的信用卡或 PayPal 帐户）时触发。 |
+| `update` | 当现有付款方式被更新时触发。                    |
 
 {% endif %}
 
@@ -158,10 +146,10 @@ shortTitle: 安全日志
 
 ### `public_key` 类操作
 
-| 操作       | 描述                                                                                                                                                                                                                                                         |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `create` | Triggered when you [add a new public SSH key to your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.product.product_location %}{% endif %}](/articles/adding-a-new-ssh-key-to-your-github-account). |
-| `delete` | Triggered when you [remove a public SSH key to your account on {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.product.product_location %}{% endif %}](/articles/reviewing-your-ssh-keys).                      |
+| 操作       | 描述                                                                                                                                                                                                                      |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `create` | 当您 [向您在 {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.product.product_location %}{% endif %} 上的帐户添加新的公有 SSH 密钥时触发](/articles/adding-a-new-ssh-key-to-your-github-account)。 |
+| `delete` | 当您 [从您在 {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.product.product_location %}{% endif %} 上的帐户删除公有 SSH 密钥时触发](/articles/reviewing-your-ssh-keys)。                       |
 
 ### `repo` 类操作
 
@@ -248,17 +236,17 @@ shortTitle: 安全日志
 
 ### `user` 类操作
 
-| 操作                                                                                                                                              | 描述                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `add_email`                                                                                                                                     | 当您                                                                                                                           |
-| {% ifversion not ghae %}[添加新电子邮件地址](/articles/changing-your-primary-email-address){% else %}添加新电子邮件地址{% endif %}时触发。{% ifversion fpt or ghec %} |                                                                                                                              |
-| `codespaces_trusted_repo_access_granted`                                                                                                        | 当您[允许为某个仓库创建的代码空间访问您的用户帐户拥有的其他仓库]时触发(/github/developing-online-with-codespaces/managing-access-and-security-for-codespaces)。 |
-| `codespaces_trusted_repo_access_revoked`                                                                                                        | 当您[禁止为某个仓库创建的代码空间访问您的用户帐户拥有的其他仓库]时触发(/github/developing-online-with-codespaces/managing-access-and-security-for-codespaces)。 |{% endif %}
+| 操作                                                                                                                                              | 描述                                                                                                                            |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `add_email`                                                                                                                                     | 当您                                                                                                                            |
+| {% ifversion not ghae %}[添加新电子邮件地址](/articles/changing-your-primary-email-address){% else %}添加新电子邮件地址{% endif %}时触发。{% ifversion fpt or ghec %} |                                                                                                                               |
+| `codespaces_trusted_repo_access_granted`                                                                                                        | 当[允许您为存储库创建的代码空间访问您的用户帐户拥有的其他存储库](/github/developing-online-with-codespaces/managing-access-and-security-for-codespaces)时触发。  |
+| `codespaces_trusted_repo_access_revoked`                                                                                                        | 当[不允许您为存储库创建的代码空间访问您的用户帐户拥有的其他存储库](/github/developing-online-with-codespaces/managing-access-and-security-for-codespaces)时触发。 |{% endif %}
 | `create`                                                                                                                                        | 在创建新帐户时触发。{% ifversion not ghae %}
-| `change_password`                                                                                                                               | 当您更改密码时触发。                                                                                                                   |
+| `change_password`                                                                                                                               | 当您更改密码时触发。                                                                                                                    |
 | `forgot_password`                                                                                                                               | 在您要求[重置密码](/articles/how-can-i-reset-my-password)时触发。{% endif %}
-| `hide_private_contributions_count`                                                                                                              | 当您[在个人资料中隐藏私有贡献](/articles/publicizing-or-hiding-your-private-contributions-on-your-profile)时触发。                             |
-| `login`                                                                                                                                         | Triggered when you log in to {% data variables.product.product_location %}.{% ifversion ghes or ghae %}
+| `hide_private_contributions_count`                                                                                                              | 当您[在个人资料中隐藏私有贡献](/articles/publicizing-or-hiding-your-private-contributions-on-your-profile)时触发。                              |
+| `login`                                                                                                                                         | 当您登录到 {% data variables.product.product_location %} 时触发。{% ifversion ghes or ghae %}
 
 
 `mandatory_message_viewed`   | 当您查看必读消息时触发（更多信息请参阅“[自定义用户消息](/admin/user-management/customizing-user-messages-for-your-enterprise)” | |{% endif %}| | `failed_login` | 当您未能成功登录时触发。 | `remove_email` | 当您删除电子邮件地址时触发。 | `rename` | Triggered when you rename your account.{% ifversion fpt or ghec %} | `report_content` | Triggered when you [report an issue or pull request, or a comment on an issue, pull request, or commit](/communities/maintaining-your-safety-on-github/reporting-abuse-or-spam).{% endif %} | `show_private_contributions_count` | Triggered when you [publicize private contributions on your profile](/articles/publicizing-or-hiding-your-private-contributions-on-your-profile).{% ifversion not ghae %} | `two_factor_requested` | Triggered when {% data variables.product.product_name %} asks you for [your two-factor authentication code](/articles/accessing-github-using-two-factor-authentication).{% endif %}

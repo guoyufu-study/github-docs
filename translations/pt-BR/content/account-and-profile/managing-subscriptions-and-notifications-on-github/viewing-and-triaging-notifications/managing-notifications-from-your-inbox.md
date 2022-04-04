@@ -16,10 +16,6 @@ topics:
 shortTitle: Gerenciar a partir de sua caixa de entrada
 ---
 
-{% ifversion ghes %}
-{% data reusables.mobile.ghes-release-phase %}
-{% endif %}
-
 ## Sobre sua caixa de entrada
 
 {% ifversion fpt or ghes or ghec %}
@@ -109,7 +105,7 @@ Para adicionar um filtro de `repo:`, você deve incluir o proprietário do repos
 
 ### Consultas suportadas `is:`
 
-Para filtrar notificações para uma atividade específica no {% data variables.product.product_location %}, você pode usar a  consulta `is`. Por exemplo, para ver apenas atualizações de convite do repositório, use `is:repository-invitation`{% ifversion not ghae %}, e para ver apenas alertas de {% data variables.product.prodname_dependabot %}, use `is:repository-vulnerability-alert`{% endif %}.
+Para filtrar notificações para uma atividade específica no {% data variables.product.product_location %}, você pode usar a  consulta `is`. Por exemplo, para visualizar apenas atualizações de convite do repositório, use `is:repository-invitation`{% ifversion not ghae %}, e para ver apenas {% data variables.product.prodname_dependabot_alerts %}, use `is:repository-vulnerability-alert`{% endif %}.
 
 - `is:check-suite`
 - `is:commit`
@@ -174,7 +170,7 @@ Se você usar {% data variables.product.prodname_dependabot %} para manter suas 
 - `reason:security_alert` para mostrar notificações para {% data variables.product.prodname_dependabot_alerts %} e pull requests das atualizações de segurança.
 - `author:app/dependabot` para mostrar as notificações geradas por {% data variables.product.prodname_dependabot %}. Isto inclui {% data variables.product.prodname_dependabot_alerts %}, pull requests para atualizações de segurança e pull requests para atualizações de versão.
 
-Para obter mais informações sobre {% data variables.product.prodname_dependabot %}, consulte "[Sobre o gerenciamento de dependências vulneráveis](/github/managing-security-vulnerabilities/about-managing-vulnerable-dependencies)".
+Para obter mais informações sobre {% data variables.product.prodname_dependabot %}, consulte "[Sobre {% data variables.product.prodname_dependabot_alerts %}](/code-security/supply-chain-security/about-alerts-for-vulnerable-dependencies)."
 {% endif %}
 
 {% ifversion ghes < 3.3 or ghae-issue-4864 %}
@@ -183,7 +179,7 @@ Se você usar {% data variables.product.prodname_dependabot %} para falar sobre 
 - `is:repository_vulnerability_alert`
 - `reason:security_alert`
 
-Para obter mais informações sobre {% data variables.product.prodname_dependabot %}, consulte "[Sobre alertas para dependências vulneráveis](/github/managing-security-vulnerabilities/about-alerts-for-vulnerable-dependencies)".
+Para obter mais informações sobre {% data variables.product.prodname_dependabot %}, consulte "[Sobre {% data variables.product.prodname_dependabot_alerts %}](/github/managing-security-vulnerabilities/about-alerts-for-vulnerable-dependencies)."
 {% endif %}
 
 {% endif %}

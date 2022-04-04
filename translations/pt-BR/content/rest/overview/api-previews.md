@@ -4,10 +4,8 @@ intro: Você pode usar pré-visualizações da API para testar novos recursos e 
 redirect_from:
   - /v3/previews
 versions:
-  fpt: '*'
   ghes: '*'
   ghae: '*'
-  ghec: '*'
 topics:
   - API
 ---
@@ -118,16 +116,6 @@ Agora você pode [exigir múltiplas revisões de aprovação](/rest/reference/re
 
 {% endif %}
 
-
-{% ifversion ghes %}
-
-## Acesso de Git anônimo aos repositórios
-
-Quando uma instância do {% data variables.product.prodname_ghe_server %} estiver em modo privado, os administradores do site e do repositório podem habilitar o acesso anônimo ao Git para um repositório público.
-
-**Tipo de mídia personalizada:** `x ray-preview` **Anunciado:** [2018-07-12](https://blog.github.com/2018-07-12-introducing-enterprise-2-14/)
-
-{% endif %}
 {% ifversion ghes < 3.3 %}
 
 ## Detalhes do cartão de projeto
@@ -137,21 +125,12 @@ As respostas da API REST para [eventos de problemas](/rest/reference/issues#even
 **Tipo de mídia personalizada:** `starfox-preview` **Anunciado:** [2018-09-05](https://developer.github.com/changes/2018-09-05-project-card-events)
 
 {% endif %}
-{% ifversion fpt or ghec %}
-
-## Manifestoes do aplicativo GitHub
-
-Os manifestos do aplicativo GitHub permitem que pessoas criem aplicativos GitHub pré-configurados. Veja "[Criar aplicativos GitHub a partir de um manifesto](/apps/building-github-apps/creating-github-apps-from-a-manifest/)" para obter mais inoformações.
-
-**Tipo de mídia personalizada:** `fury-preview`
-
-{% endif %}
 
 {% ifversion ghes < 3.3 %}
 
 ## Status da implantação
 
-Agora você pode atualizar o ambiente `` de um [status de implantação](/rest/reference/repos#create-a-deployment-status) e usar os estados `in_progress` e `na fila`. Ao criar o status da implantação, agora você pode usar o parâmetro `auto_inactive` para marcar implantações de `produção` antigas como `inativa`.
+Agora você pode atualizar o ambiente `` de um [status de implantação](/rest/reference/deployments#create-a-deployment-status) e usar os estados `in_progress` e `na fila`. Ao criar o status da implantação, agora você pode usar o parâmetro `auto_inactive` para marcar implantações de `produção` antigas como `inativa`.
 
 **Tipo de mídia personalizada:** `flash-preview` **Anunciado:** [2018-10-16](https://developer.github.com/changes/2018-10-16-deployments-environments-states-and-auto-inactive-updates/)
 
@@ -167,13 +146,15 @@ Agora você pode configurar se os integrantes da organização podem criar repos
 
 {% endif %}
 
+{% ifversion ghes < 3.4 %}
 ## Anexos de conteúdo
 
 Agora você pode fornecer mais informações no GitHub para URLs vinculadas a domínios registrados usando a API de {% data variables.product.prodname_unfurls %}. Consulte "[Usar anexos de conteúdo](/apps/using-content-attachments/)" para obter mais informações.
 
 **Tipos de mídia personalizada:** `corsair-preview` **Anunciado:** [2018-12-10](https://developer.github.com/changes/2018-12-10-content-attachments-api/)
 
-{% ifversion ghes < 3.3 %}
+{% endif %}
+{% ifversion ghae or ghes < 3.3 %}
 
 ## Habilitar e desabilitar páginas
 

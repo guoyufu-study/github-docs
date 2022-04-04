@@ -13,13 +13,12 @@ shortTitle: 构建和测试 .NET
 
 {% data reusables.actions.enterprise-beta %}
 {% data reusables.actions.enterprise-github-hosted-runners %}
-{% data reusables.actions.ae-beta %}
 
 ## 简介
 
 本指南介绍如何构建、测试和发布 .NET 包。
 
-{% ifversion ghae %} 要构建和测试您在 {% data variables.product.prodname_ghe_managed %} 上的 .NET 项目，则需要创建包含 .NET Core SDK 的自定义操作系统映像。 有关如何确定 {% data variables.actions.hosted_runner %} 已安装所需软件的说明，请参阅“[创建自定义映像](/actions/using-github-hosted-runners/creating-custom-images)”。
+{% ifversion ghae %} 若要在 {% data variables.product.prodname_ghe_managed %} 上构建和测试 .NET 项目，需要 .NET Core SDK。 {% data reusables.actions.self-hosted-runners-software %}
 {% else %} {% data variables.product.prodname_dotcom %} 托管的运行器有工具缓存预安装的软件，包括 .NET Core SDK。 有关最新版软件以及 .NET Core SDK 预安装版本的完整列表，请参阅 [{% data variables.product.prodname_dotcom %} 自托管运行器上安装的软件](/actions/reference/specifications-for-github-hosted-runners)。
 {% endif %}
 
@@ -29,13 +28,14 @@ shortTitle: 构建和测试 .NET
 
 建议您对 .NET Core SDK 有个基本的了解。 更多信息请参阅“[开始使用 .NET](https://dotnet.microsoft.com/learn)”。
 
-## 从 .NET 工作流程模板开始
+## 使用 .NET 入门工作流程
 
-{% data variables.product.prodname_dotcom %} 提供了一个 .NET 工作流程模板，该模板应适合大多数 .NET 项目，本指南包括演示如何自定义此模板的示例。 更多信息请参阅 [.NET 工作流程模板](https://github.com/actions/setup-dotnet)。
+{% data variables.product.prodname_dotcom %} 提供有 .NET 入门工作流程，应适合大多数 .NET 项目，本指南包括演示如何自定义此入门工作流程的示例。 更多信息请参阅 [.NET 入门工作流程](https://github.com/actions/setup-dotnet)。
 
-要快速开始，请将模板添加到仓库的 `.github/workflows` 目录中。
+要快速开始，请将入门工作流程添加到仓库的 `.github/workflows` 目录中。
 
 {% raw %}
+
 ```yaml
 name: dotnet package
 
@@ -62,6 +62,7 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 ```
+
 {% endraw %}
 
 ## 指定 .NET 版本
@@ -84,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '3.0', '3.1.x', '5.0.x' ]
+        dotnet-version: [ '3.0', '3.1.x', '5.0.x' ]
 
     steps:
       - uses: actions/checkout@v2
@@ -217,7 +218,7 @@ jobs:
         - name: Test with dotnet
           run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
         - name: Upload dotnet test results
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v3
           with:
             name: dotnet-results-${{ matrix.dotnet-version }}
             path: TestResults-${{ matrix.dotnet-version }}
@@ -228,7 +229,7 @@ jobs:
 
 ## 发布到包注册表
 
-您可以配置工作流程在 CI 测试通过后将 Dotnet 包发布到包注册表。 您可以使用仓库机密来存储发布二进制文件所需的任何令牌或凭据。 下面的示例使用 `dotnet core cli`创建并发布软件包到 {% data variables.product.prodname_registry %}。
+您可以配置工作流程在 CI 测试通过后将 .NET 包发布到包注册表。 您可以使用仓库机密来存储发布二进制文件所需的任何令牌或凭据。 下面的示例使用 `dotnet core cli`创建并发布软件包到 {% data variables.product.prodname_registry %}。
 
 ```yaml
 name: Upload dotnet package
@@ -239,7 +240,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest{% ifversion fpt or ghes > 3.1 or ghae-next or ghec %}
+    runs-on: ubuntu-latest{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions:
       packages: write
       contents: read{% endif %}

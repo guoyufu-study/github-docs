@@ -19,7 +19,6 @@ shortTitle: 从 GitLab CI/CD 迁移
 
 {% data reusables.actions.enterprise-beta %}
 {% data reusables.actions.enterprise-github-hosted-runners %}
-{% data reusables.actions.ae-beta %}
 
 ## 简介
 
@@ -213,7 +212,7 @@ jobs:
 </tr>
 </table>
 
-For more information, see "[Expressions](/actions/learn-github-actions/expressions)."
+更多信息请参阅“[表达式](/actions/learn-github-actions/expressions)”。
 
 ## 作业之间的依赖关系
 
@@ -392,7 +391,7 @@ artifacts:
 {% raw %}
 ```yaml
 - name: Upload math result for job 1
-  uses: actions/upload-artifact@v2
+  uses: actions/upload-artifact@v3
   with:
     name: homework
     path: math-homework.txt

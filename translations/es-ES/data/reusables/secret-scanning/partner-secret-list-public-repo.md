@@ -58,6 +58,7 @@
 | Meta                      | Token de Acceso a Facebook                                  |
 | npm                       | Token de Acceso de npm                                      |
 | NuGet                     | Clave de API de NuGet                                       |
+| Octopus Deploy            | Llave de la API de Octopus Deploy                           |
 | OpenAI                    | Clave de la API de OpenAI                                   |
 | Palantir                  | Token Web de JSON de Palantir                               |
 | PlanetScale               | Contraseña de base de datos de PlanetScale                  |
@@ -75,6 +76,8 @@
 | Samsara                   | Token de API de Samsara                                     |
 | Samsara                   | Token de Acceso de OAuth de Samsara                         |
 | SendGrid                  | Clave de la API de SendGrid                                 |
+| Sendinblue                | Llave de la API de Sendinblue                               |
+| Sendinblue                | Llave SMTP de Sendinblue                                    |
 | Shopify                   | Secreto Compartid de la App de Shopify                      |
 | Shopify                   | Token de Acceso de Shopify                                  |
 | Shopify                   | Token de Acceso de la App Personalizada de Shopify          |
@@ -88,7 +91,9 @@
 | Stripe                    | Clave Secreta de API de Pruebas de Stripe                   |
 | Stripe                    | Clave Restringida de API de Stripe Live                     |
 | Stripe                    | Clave Restringida de API de Pruebas de Stripe               |
+| Supabase                  | Supabase Service Key                                        |
 | Tencent Cloud             | ID de Secreto de Tencent Cloud                              |
 | Twilio                    | Identificador de Secuencia de Cuenta de Twilio              |
 | Twilio                    | Clave de API de Twilio                                      |
+| Typeform                  | Token de acceso personal a Typeform                         |
 | Valour                    | Token de acceso a Valour                                    |

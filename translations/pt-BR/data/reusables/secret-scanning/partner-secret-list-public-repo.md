@@ -58,6 +58,7 @@
 | Meta                      | Facebook Access Token                                     |
 | npm                       | Token de acesso de npm                                    |
 | NuGet                     | Chave de API de NuGet                                     |
+| Octopus Deploy            | Octopus Deploy API Key                                    |
 | OpenAI                    | OpenAI API Key                                            |
 | Palantir                  | Token web de JSON de Palantir                             |
 | PlanetScale               | PlanetScale Database Password                             |
@@ -75,6 +76,8 @@
 | Samsara                   | Token de API de Samsara                                   |
 | Samsara                   | Token de acesso de OAuth de Samsara                       |
 | SendGrid                  | SendGrid API Key                                          |
+| Sendinblue                | Sendinblue API Key                                        |
+| Sendinblue                | Sendinblue SMTP Key                                       |
 | Shopify                   | Segredo compartilhado do aplicativo Shopify               |
 | Shopify                   | Token de acesso de Shopify                                |
 | Shopify                   | Token de acesso do aplicativo personalizado Shopify       |
@@ -88,7 +91,9 @@
 | Stripe                    | Chave secreta da API de Teste de Stripe                   |
 | Stripe                    | Chave restrita da API de Stripe Live                      |
 | Stripe                    | Chave restrita da API de testes de Stripe                 |
+| Supabase                  | Supabase Service Key                                      |
 | Tencent Cloud             | ID de segredot de Tencent Cloud                           |
 | Twilio                    | Identificador de string de conta de Twilio                |
 | Twilio                    | Chave da API de Twilio                                    |
+| Typeform                  | Typeform Personal Access Token                            |
 | Valour                    | Valour Access Token                                       |

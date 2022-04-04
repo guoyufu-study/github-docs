@@ -14,6 +14,7 @@ topics:
   - Codespaces
   - Fundamentals
   - Developer
+shortTitle: Create a codespace
 ---
 
 ## codespace の作成について
@@ -39,6 +40,8 @@ If you want to use Git hooks for your codespace, then you should set up hooks us
 {% data reusables.codespaces.use-visual-studio-features %}
 
 {% data reusables.codespaces.you-can-see-all-your-codespaces %}
+
+{% data reusables.codespaces.prebuilds-crossreference %}
 
 ## Access to {% data variables.product.prodname_codespaces %}
 
@@ -66,8 +69,6 @@ If you would like to create a codespace for a repository owned by your personal 
 
 ## codespace を作成する
 
-{% include tool-switcher %}
-
 {% webui %}
 
 {% data reusables.repositories.navigate-to-repo %}
@@ -79,7 +80,11 @@ If you would like to create a codespace for a repository owned by your personal 
 
    ![[New codespace] ボタン](/assets/images/help/codespaces/new-codespace-button.png)
 
-   If you are a member of an organization and are creating a codespace on a repository owned by that organization, you can select the option of a different machine type. From the dialog, choose a machine type and then click **Create codespace**. ![Machine type choice](/assets/images/help/codespaces/choose-custom-machine-type.png)
+   If you are a member of an organization and are creating a codespace on a repository owned by that organization, you can select the option of a different machine type. From the dialog box, choose a machine type and then click **Create codespace**.
+
+   ![Machine type choice](/assets/images/help/codespaces/choose-custom-machine-type.png)
+
+   {% data reusables.codespaces.codespaces-machine-type-availability %}
 
 {% endwebui %}
 

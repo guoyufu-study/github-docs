@@ -56,14 +56,13 @@ Se redirigirá al creador de la app a una página de GitHub en donde encontrará
 
 #### Parámetros del Manifiesto de la GitHub App
 
- | Nombre                | Type                     | Descripción                                                                                                                                                                                                                                                     |
+ | Nombre                | Tipo                     | Descripción                                                                                                                                                                                                                                                     |
  | --------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
  | `name (nombre)`       | `secuencia`              | El nombre dela GitHub App.                                                                                                                                                                                                                                      |
  | `url`                 | `secuencia`              | **Requerido.** La página principal de tu GitHub App.                                                                                                                                                                                                            |
  | `hook_attributes`     | `objeto`                 | La configuración del webhook de la GitHub App.                                                                                                                                                                                                                  |
- | `redirect_url`        | `secuencia`              | La URL completa a la cual redirigir después de que el usuario incia la creación de una GitHub App desde un manifiesto.{% ifversion fpt or ghae-next or ghes > 3.0 or ghec %}
- | `callback_urls`       | `conjunto de secuencias` | Una URL completa a la cual redirigir cuando alguien autorice una instalación. Puedes proporcionar hasta 10 URL de rellamado.{% else %}
- | `callback_url`        | `secuencia`              | Una URL completa a la cual redirigir cuando alguien autoriza una instalación.{% endif %}
+ | `redirect_url`        | `secuencia`              | La URL completa a la cual redireccionar después de que un usuario inicie la creación de una GitHub App desde un manifiesto.                                                                                                                                     |
+ | `callback_urls`       | `conjunto de secuencias` | Una URL completa a la cual redirigir cuando alguien autorice una instalación. Puedes proporcionar hasta 10 URL de rellamado.                                                                                                                                    |
  | `descripción`         | `secuencia`              | Una descripción de la GitHub App.                                                                                                                                                                                                                               |
  | `public`              | `boolean`                | Configúralo como `true` cuando tu GitHub App esté disponible al público o como `false` si solo puede acceder el propietario de la misma.                                                                                                                        |
  | `default_events`      | `arreglo`                | La lista de [eventos](/webhooks/event-payloads) a la cual se suscribe la GitHub App.                                                                                                                                                                            |
@@ -71,14 +70,14 @@ Se redirigirá al creador de la app a una página de GitHub en donde encontrará
 
 El objeto `hook_attributes` tiene la siguiente clave:
 
-| Nombre   | Type        | Descripción                                                                                   |
+| Nombre   | Tipo        | Descripción                                                                                   |
 | -------- | ----------- | --------------------------------------------------------------------------------------------- |
 | `url`    | `secuencia` | **Requerido.** La URL del servidor que recibirá las solicitudes de `POST` del webhook.        |
 | `active` | `boolean`   | Entrega detalles del evento cuando se activa este gancho y su valor predeterminado es "true". |
 
 #### Parámetros
 
- | Nombre  | Type        | Descripción                                 |
+ | Nombre  | Tipo        | Descripción                                 |
  | ------- | ----------- | ------------------------------------------- |
  | `state` | `secuencia` | {% data reusables.apps.state_description %}
 
@@ -101,9 +100,9 @@ Este ejemplo utiliza un formato en una página web con un botón que activa la s
      "url": "https://example.com/github/events",
    },
    "redirect_url": "https://example.com/redirect",
-   {% ifversion fpt or ghae-next or ghes > 3.0 or ghec %}"callback_urls": [
+   "callback_urls": [
      "https://example.com/callback"
-   ],{% else %}"callback_url": "https://example.com/callback",{% endif %}
+   ],
    "public": true,
    "default_permissions": {
      "issues": "write",
@@ -136,9 +135,9 @@ Este ejemplo utiliza un formato en una página web con un botón que activa la s
      "url": "https://example.com/github/events",
    },
    "redirect_url": "https://example.com/redirect",
-   {% ifversion fpt or ghae-next or ghes > 3.0 or ghec %}"callback_urls": [
+   "callback_urls": [
      "https://example.com/callback"
-   ],{% else %}"callback_url": "https://example.com/callback",{% endif %}
+   ],
    "public": true,
    "default_permissions": {
      "issues": "write",

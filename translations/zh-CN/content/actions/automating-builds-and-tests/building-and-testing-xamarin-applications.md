@@ -21,7 +21,6 @@ shortTitle: 构建和测试 Xamarin 应用程序
 
 {% data reusables.actions.enterprise-beta %}
 {% data reusables.actions.enterprise-github-hosted-runners %}
-{% data reusables.actions.ae-beta %}
 
 ## 简介
 
@@ -32,7 +31,7 @@ shortTitle: 构建和测试 Xamarin 应用程序
 * [macOS 10.15](https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xamarin-bundles)
 * [macOS 11](https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md#xamarin-bundles)
 
-{% data reusables.github-actions.macos-runner-preview %}
+{% data reusables.actions.macos-runner-preview %}
 
 ## 基本要求
 

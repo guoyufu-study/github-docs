@@ -2,8 +2,8 @@
 title: 识别和授权 GitHub 应用程序用户
 intro: '{% data reusables.shortdesc.identifying_and_authorizing_github_apps %}'
 redirect_from:
-  - /early-access/integrations/user-identification-authorization/
-  - /apps/building-integrations/setting-up-and-registering-github-apps/identifying-users-for-github-apps/
+  - /early-access/integrations/user-identification-authorization
+  - /apps/building-integrations/setting-up-and-registering-github-apps/identifying-users-for-github-apps
   - /apps/building-github-apps/identifying-and-authorizing-users-for-github-apps
   - /developers/apps/identifying-and-authorizing-users-for-github-apps
 versions:
@@ -26,11 +26,7 @@ shortTitle: 识别和授权用户
 
 要授权用户使用在浏览器中运行的标准应用程序，请使用 [web 应用程序流程](#web-application-flow)。
 
-{% ifversion fpt or ghae or ghes > 3.0 or ghec %}
-
 要授权用户使用不直接访问浏览器的无头应用程序（例如 CLI 工具或 Git 凭据管理器），请使用[设备流程](#device-flow)。 设备流程使用 OAuth 2.0 [设备授权授予](https://tools.ietf.org/html/rfc8628)。
-
-{% endif %}
 
 ## Web 应用程序流程
 
@@ -51,13 +47,13 @@ shortTitle: 识别和授权用户
 
 #### 参数
 
-| 名称             | 类型    | 描述                                                                                                                                                                                                                             |
-| -------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `client_id`    | `字符串` | **必填。**GitHub 应用程序的客户端 ID。 选择应用程序时，您可以在 [GitHub 应用程序设置](https://github.com/settings/apps)中找到它。 **注意：** 应用程序 ID 和客户端 ID 不相同，无法互换。                                                                                               |
-| `redirect_uri` | `字符串` | 用户获得授权后被发送到的应用程序中的 URL。 它必须完全匹配设置 GitHub 应用程序时 {% ifversion fpt or ghes > 3.0 or ghec %} 作为 **Callback URL（回调 URL）**提供的 URL 之一 {% else %} 在 **User authorization callback URL（用户授权回调 URL）**字段中提供的 URL{% endif %}，并且不能包含任何其他参数。 |
-| `state`        | `字符串` | 它应该包含一个随机字符串以防止伪造攻击，并且可以包含任何其他任意数据。                                                                                                                                                                                            |
-| `login`        | `字符串` | 提供用于登录和授权应用程序的特定账户。                                                                                                                                                                                                            |
-| `allow_signup` | `字符串` | 在 OAuth 流程中，是否向经过验证的用户提供注册 {% data variables.product.prodname_dotcom %} 的选项。 默认值为 `true`。 如有政策禁止注册，请使用 `false`。                                                                                                                |
+| 名称             | 类型    | 描述                                                                                                                                                                                                                       |
+| -------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `client_id`    | `字符串` | **必填。**GitHub 应用程序的客户端 ID。 选择应用程序时，您可以在 [GitHub 应用程序设置](https://github.com/settings/apps)中找到它。 **注意：** 应用程序 ID 和客户端 ID 不相同，无法互换。                                                                                         |
+| `redirect_uri` | `字符串` | 用户获得授权后被发送到的应用程序中的 URL。 它必须完全匹配设置 GitHub 应用程序时 {% ifversion fpt or ghes or ghec %} 作为 **Callback URL（回调 URL）**提供的 URL 之一 {% else %} 在 **User authorization callback URL（用户授权回调 URL）**字段中提供的 URL{% endif %}，并且不能包含任何其他参数。 |
+| `state`        | `字符串` | 它应该包含一个随机字符串以防止伪造攻击，并且可以包含任何其他任意数据。                                                                                                                                                                                      |
+| `login`        | `字符串` | 提供用于登录和授权应用程序的特定账户。                                                                                                                                                                                                      |
+| `allow_signup` | `字符串` | 在 OAuth 流程中，是否向经过验证的用户提供注册 {% data variables.product.prodname_dotcom %} 的选项。 默认值为 `true`。 如有政策禁止注册，请使用 `false`。                                                                                                          |
 
 {% note %}
 
@@ -85,13 +81,13 @@ shortTitle: 识别和授权用户
 
 #### 参数
 
-| 名称              | 类型    | 描述                                                                                                                                                                                                                             |
-| --------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `client_id`     | `字符串` | **必填。**GitHub 应用程序的客户端 ID。                                                                                                                                                                                                     |
-| `client_secret` | `字符串` | **必填。**GitHub 应用程序的客户端密钥。                                                                                                                                                                                                      |
-| `代码`            | `字符串` | **必填。**您收到的响应第 1 步的代码。                                                                                                                                                                                                         |
-| `redirect_uri`  | `字符串` | 用户获得授权后被发送到的应用程序中的 URL。 它必须完全匹配设置 GitHub 应用程序时 {% ifversion fpt or ghes > 3.0 or ghec %} 作为 **Callback URL（回调 URL）**提供的 URL 之一 {% else %} 在 **User authorization callback URL（用户授权回调 URL）**字段中提供的 URL{% endif %}，并且不能包含任何其他参数。 |
-| `state`         | `字符串` | 您在第 1 步提供的不可猜测的随机字符串。                                                                                                                                                                                                          |
+| 名称              | 类型    | 描述                                                                                                                                                                                                                       |
+| --------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `client_id`     | `字符串` | **必填。**GitHub 应用程序的客户端 ID。                                                                                                                                                                                               |
+| `client_secret` | `字符串` | **必填。**GitHub 应用程序的客户端密钥。                                                                                                                                                                                                |
+| `代码`            | `字符串` | **必填。**您收到的响应第 1 步的代码。                                                                                                                                                                                                   |
+| `redirect_uri`  | `字符串` | 用户获得授权后被发送到的应用程序中的 URL。 它必须完全匹配设置 GitHub 应用程序时 {% ifversion fpt or ghes or ghec %} 作为 **Callback URL（回调 URL）**提供的 URL 之一 {% else %} 在 **User authorization callback URL（用户授权回调 URL）**字段中提供的 URL{% endif %}，并且不能包含任何其他参数。 |
+| `state`         | `字符串` | 您在第 1 步提供的不可猜测的随机字符串。                                                                                                                                                                                                    |
 
 #### 响应
 
@@ -99,9 +95,9 @@ shortTitle: 识别和授权用户
 
 ```json
 {
-  "access_token": "{% ifversion fpt or ghes > 3.1 or ghae-next or ghec %}ghu_16C7e42F292c6912E7710c838347Ae178B4a{% else %}e72e16c7e42f292c6912e7710c838347ae178b4a{% endif %}",
+  "access_token": "{% ifversion fpt or ghes > 3.1 or ghae or ghec %}ghu_16C7e42F292c6912E7710c838347Ae178B4a{% else %}e72e16c7e42f292c6912e7710c838347ae178b4a{% endif %}",
   "expires_in": 28800,
-  "refresh_token": "{% ifversion fpt or ghes > 3.1 or ghae-next or ghec %}ghr_1B4a2e77838347a7E420ce178F2E7c6912E169246c34E1ccbF66C46812d16D5B1A9Dc86A1498{% else %}r1.c1b4a2e77838347a7e420ce178f2e7c6912e1692{% endif %}",
+  "refresh_token": "{% ifversion fpt or ghes > 3.1 or ghae or ghec %}ghr_1B4a2e77838347a7E420ce178F2E7c6912E169246c34E1ccbF66C46812d16D5B1A9Dc86A1498{% else %}r1.c1b4a2e77838347a7e420ce178f2e7c6912e1692{% endif %}",
   "refresh_token_expires_in": 15811200,
   "scope": "",
   "token_type": "bearer"
@@ -121,8 +117,6 @@ shortTitle: 识别和授权用户
 curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre %}/user
 ```
 
-{% ifversion fpt or ghae or ghes > 3.0 or ghec %}
-
 ## 设备流程
 
 {% note %}
@@ -133,12 +127,9 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 设备流程允许您授权用户使用无头应用程序，例如 CLI 工具或 Git 凭据管理器。
 
-有关使用设备流程授权用户的更多信息，请参阅“[授权 OAuth 应用程序](/developers/apps/authorizing-oauth-apps#device-flow)”。
-
-{% endif %}
+{% if device-flow-is-opt-in %}在使用设备流识别和授权用户之前，必须先在应用的设置中启用它。 有关启用设备流的详细信息，请参阅“[修改 GitHub 应用程序](/developers/apps/managing-github-apps/modifying-a-github-app)”。 {% endif %}有关使用设备流程授权用户的更多信息，请参阅“[授权 OAuth 应用程序](/developers/apps/authorizing-oauth-apps#device-flow)”。
 
 ## 检查用户可以访问哪些安装资源
-
 
 获得用户的 OAuth 令牌后，您可以检查该用户可以访问哪些安装。
 
@@ -240,16 +231,16 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### 部署状态
 
-* [列出部署状态](/rest/reference/repos#list-deployment-statuses)
-* [创建部署状态](/rest/reference/repos#create-a-deployment-status)
-* [获取部署状态](/rest/reference/repos#get-a-deployment-status)
+* [列出部署状态](/rest/reference/deployments#list-deployment-statuses)
+* [创建部署状态](/rest/reference/deployments#create-a-deployment-status)
+* [获取部署状态](/rest/reference/deployments#get-a-deployment-status)
 
 #### 部署
 
-* [列出部署](/rest/reference/repos#list-deployments)
-* [创建部署](/rest/reference/repos#create-a-deployment)
-* [获取部署](/rest/reference/repos#get-a-deployment){% ifversion fpt or ghes or ghae or ghec %}
-* [删除部署](/rest/reference/repos#delete-a-deployment){% endif %}
+* [列出部署](/rest/reference/deployments#list-deployments)
+* [创建部署](/rest/reference/deployments#create-a-deployment)
+* [获取部署](/rest/reference/deployments#get-a-deployment){% ifversion fpt or ghes or ghae or ghec %}
+* [删除部署](/rest/reference/deployments#delete-a-deployment){% endif %}
 
 #### 事件
 
@@ -272,7 +263,8 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### Git 引用
 
-* [创建引用](/rest/reference/git#create-a-reference)* [获取引用](/rest/reference/git#get-a-reference)
+* [创建引用](/rest/reference/git#create-a-reference)
+* [获取引用](/rest/reference/git#get-a-reference)
 * [列出匹配的引用](/rest/reference/git#list-matching-references)
 * [更新引用](/rest/reference/git#update-a-reference)
 * [删除引用](/rest/reference/git#delete-a-reference)
@@ -449,8 +441,8 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 {% ifversion fpt or ghec %}
 #### 组织团队同步
 
-* [列出团队的 idp 组](/rest/reference/teams#list-idp-groups-for-a-team)
-* [创建或更新 idp 组连接](/rest/reference/teams#create-or-update-idp-group-connections)
+* [列出团队的 IdP 组](/rest/reference/teams#list-idp-groups-for-a-team)
+* [创建或更新 IdP 组连接](/rest/reference/teams#create-or-update-idp-group-connections)
 * [列出组织的 IdP 组](/rest/reference/teams#list-idp-groups-for-an-organization)
 {% endif %}
 
@@ -610,7 +602,7 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 * [获取仓库](/rest/reference/repos#get-a-repository)
 * [更新仓库](/rest/reference/repos#update-a-repository)
 * [删除仓库](/rest/reference/repos#delete-a-repository)
-* [比较两个提交](/rest/reference/repos#compare-two-commits)
+* [比较两个提交](/rest/reference/commits#compare-two-commits)
 * [列出仓库贡献者](/rest/reference/repos#list-repository-contributors)
 * [列出复刻](/rest/reference/repos#list-forks)
 * [创建复刻](/rest/reference/repos#create-a-fork)
@@ -642,68 +634,68 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### 仓库分支
 
-* [列出分支](/rest/reference/repos#list-branches)
-* [获取分支](/rest/reference/repos#get-a-branch)
-* [获取分支保护](/rest/reference/repos#get-branch-protection)
-* [更新分支保护](/rest/reference/repos#update-branch-protection)
-* [删除分支保护](/rest/reference/repos#delete-branch-protection)
-* [获取管理员分支保护](/rest/reference/repos#get-admin-branch-protection)
-* [设置管理员分支保护](/rest/reference/repos#set-admin-branch-protection)
-* [删除管理员分支保护](/rest/reference/repos#delete-admin-branch-protection)
-* [获取拉取请求审查保护](/rest/reference/repos#get-pull-request-review-protection)
-* [更新拉取请求审查保护](/rest/reference/repos#update-pull-request-review-protection)
-* [删除拉取请求审查保护](/rest/reference/repos#delete-pull-request-review-protection)
-* [获取提交签名保护](/rest/reference/repos#get-commit-signature-protection)
-* [创建提交签名保护](/rest/reference/repos#create-commit-signature-protection)
-* [删除提交签名保护](/rest/reference/repos#delete-commit-signature-protection)
-* [获取状态检查保护](/rest/reference/repos#get-status-checks-protection)
-* [更新状态检查保护](/rest/reference/repos#update-status-check-protection)
-* [删除状态检查保护](/rest/reference/repos#remove-status-check-protection)
-* [获取所有状态检查上下文](/rest/reference/repos#get-all-status-check-contexts)
-* [添加状态检查上下文](/rest/reference/repos#add-status-check-contexts)
-* [设置状态检查上下文](/rest/reference/repos#set-status-check-contexts)
-* [删除状态检查上下文](/rest/reference/repos#remove-status-check-contexts)
-* [获取访问限制](/rest/reference/repos#get-access-restrictions)
-* [删除访问限制](/rest/reference/repos#delete-access-restrictions)
+* [列出分支](/rest/reference/branches#list-branches)
+* [获取分支](/rest/reference/branches#get-a-branch)
+* [获取分支保护](/rest/reference/branches#get-branch-protection)
+* [更新分支保护](/rest/reference/branches#update-branch-protection)
+* [删除分支保护](/rest/reference/branches#delete-branch-protection)
+* [获取管理员分支保护](/rest/reference/branches#get-admin-branch-protection)
+* [设置管理员分支保护](/rest/reference/branches#set-admin-branch-protection)
+* [删除管理员分支保护](/rest/reference/branches#delete-admin-branch-protection)
+* [获取拉取请求审查保护](/rest/reference/branches#get-pull-request-review-protection)
+* [更新拉取请求审查保护](/rest/reference/branches#update-pull-request-review-protection)
+* [删除拉取请求审查保护](/rest/reference/branches#delete-pull-request-review-protection)
+* [获取提交签名保护](/rest/reference/branches#get-commit-signature-protection)
+* [创建提交签名保护](/rest/reference/branches#create-commit-signature-protection)
+* [删除提交签名保护](/rest/reference/branches#delete-commit-signature-protection)
+* [获取状态检查保护](/rest/reference/branches#get-status-checks-protection)
+* [更新状态检查保护](/rest/reference/branches#update-status-check-protection)
+* [删除状态检查保护](/rest/reference/branches#remove-status-check-protection)
+* [获取所有状态检查上下文](/rest/reference/branches#get-all-status-check-contexts)
+* [添加状态检查上下文](/rest/reference/branches#add-status-check-contexts)
+* [设置状态检查上下文](/rest/reference/branches#set-status-check-contexts)
+* [删除状态检查上下文](/rest/reference/branches#remove-status-check-contexts)
+* [获取访问限制](/rest/reference/branches#get-access-restrictions)
+* [删除访问限制](/rest/reference/branches#delete-access-restrictions)
 * [列出有权访问受保护分支的团队](/rest/reference/repos#list-teams-with-access-to-the-protected-branch)
-* [添加团队访问限制](/rest/reference/repos#add-team-access-restrictions)
-* [设置团队访问限制](/rest/reference/repos#set-team-access-restrictions)
-* [删除团队访问限制](/rest/reference/repos#remove-team-access-restrictions)
+* [添加团队访问限制](/rest/reference/branches#add-team-access-restrictions)
+* [设置团队访问限制](/rest/reference/branches#set-team-access-restrictions)
+* [删除团队访问限制](/rest/reference/branches#remove-team-access-restrictions)
 * [列出受保护分支的用户限制](/rest/reference/repos#list-users-with-access-to-the-protected-branch)
-* [添加用户访问限制](/rest/reference/repos#add-user-access-restrictions)
-* [设置用户访问限制](/rest/reference/repos#set-user-access-restrictions)
-* [删除用户访问限制](/rest/reference/repos#remove-user-access-restrictions)
-* [合并分支](/rest/reference/repos#merge-a-branch)
+* [添加用户访问限制](/rest/reference/branches#add-user-access-restrictions)
+* [设置用户访问限制](/rest/reference/branches#set-user-access-restrictions)
+* [删除用户访问限制](/rest/reference/branches#remove-user-access-restrictions)
+* [合并分支](/rest/reference/branches#merge-a-branch)
 
 #### 仓库协作者
 
-* [列出仓库协作者](/rest/reference/repos#list-repository-collaborators)
-* [检查用户是否为仓库协作者](/rest/reference/repos#check-if-a-user-is-a-repository-collaborator)
-* [添加仓库协作者](/rest/reference/repos#add-a-repository-collaborator)
-* [删除仓库协作者](/rest/reference/repos#remove-a-repository-collaborator)
-* [获取用户的仓库权限](/rest/reference/repos#get-repository-permissions-for-a-user)
+* [列出仓库协作者](/rest/reference/collaborators#list-repository-collaborators)
+* [检查用户是否为仓库协作者](/rest/reference/collaborators#check-if-a-user-is-a-repository-collaborator)
+* [添加仓库协作者](/rest/reference/collaborators#add-a-repository-collaborator)
+* [删除仓库协作者](/rest/reference/collaborators#remove-a-repository-collaborator)
+* [获取用户的仓库权限](/rest/reference/collaborators#get-repository-permissions-for-a-user)
 
 #### 仓库提交注释
 
-* [列出仓库的提交注释](/rest/reference/repos#list-commit-comments-for-a-repository)
-* [获取提交注释](/rest/reference/repos#get-a-commit-comment)
-* [更新提交注释](/rest/reference/repos#update-a-commit-comment)
-* [删除提交注释](/rest/reference/repos#delete-a-commit-comment)
-* [列出提交注释](/rest/reference/repos#list-commit-comments)
-* [创建提交注释](/rest/reference/repos#create-a-commit-comment)
+* [列出仓库的提交注释](/rest/reference/commits#list-commit-comments-for-a-repository)
+* [获取提交注释](/rest/reference/commits#get-a-commit-comment)
+* [更新提交注释](/rest/reference/commits#update-a-commit-comment)
+* [删除提交注释](/rest/reference/commits#delete-a-commit-comment)
+* [列出提交注释](/rest/reference/commits#list-commit-comments)
+* [创建提交注释](/rest/reference/commits#create-a-commit-comment)
 
 #### 仓库提交
 
-* [列出提交](/rest/reference/repos#list-commits)
-* [获取提交](/rest/reference/repos#get-a-commit)
-* [列出头部提交分支](/rest/reference/repos#list-branches-for-head-commit)
+* [列出提交](/rest/reference/commits#list-commits)
+* [获取提交](/rest/reference/commits#get-a-commit)
+* [列出头部提交分支](/rest/reference/commits#list-branches-for-head-commit)
 * [列出与提交关联的拉取请求](/rest/reference/repos#list-pull-requests-associated-with-commit)
 
 #### 仓库社区
 
 * [获取仓库的行为准则](/rest/reference/codes-of-conduct#get-the-code-of-conduct-for-a-repository)
 {% ifversion fpt or ghec %}
-* [获取社区资料指标](/rest/reference/repos#get-community-profile-metrics)
+* [获取社区资料指标](/rest/reference/repository-metrics#get-community-profile-metrics)
 {% endif %}
 
 #### 仓库内容
@@ -723,40 +715,40 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### 仓库挂钩
 
-* [列出仓库 web 挂钩](/rest/reference/repos#list-repository-webhooks)
-* [创建仓库 web 挂钩](/rest/reference/repos#create-a-repository-webhook)
-* [获取仓库 web 挂钩](/rest/reference/repos#get-a-repository-webhook)
-* [更新仓库 web 挂钩](/rest/reference/repos#update-a-repository-webhook)
-* [删除仓库 web 挂钩](/rest/reference/repos#delete-a-repository-webhook)
-* [Ping 仓库 web 挂钩](/rest/reference/repos#ping-a-repository-webhook)
+* [列出仓库 web 挂钩](/rest/reference/webhooks#list-repository-webhooks)
+* [创建仓库 web 挂钩](/rest/reference/webhooks#create-a-repository-webhook)
+* [获取仓库 web 挂钩](/rest/reference/webhooks#get-a-repository-webhook)
+* [更新仓库 web 挂钩](/rest/reference/webhooks#update-a-repository-webhook)
+* [删除仓库 web 挂钩](/rest/reference/webhooks#delete-a-repository-webhook)
+* [Ping 仓库 web 挂钩](/rest/reference/webhooks#ping-a-repository-webhook)
 * [测试推送仓库 web 挂钩](/rest/reference/repos#test-the-push-repository-webhook)
 
 #### 仓库邀请
 
-* [列出仓库邀请](/rest/reference/repos#list-repository-invitations)
-* [更新仓库邀请](/rest/reference/repos#update-a-repository-invitation)
-* [删除仓库邀请](/rest/reference/repos#delete-a-repository-invitation)
-* [列出经验证用户的仓库邀请](/rest/reference/repos#list-repository-invitations-for-the-authenticated-user)
-* [接受仓库邀请](/rest/reference/repos#accept-a-repository-invitation)
-* [拒绝仓库邀请](/rest/reference/repos#decline-a-repository-invitation)
+* [列出仓库邀请](/rest/reference/collaborators#list-repository-invitations)
+* [更新仓库邀请](/rest/reference/collaborators#update-a-repository-invitation)
+* [删除仓库邀请](/rest/reference/collaborators#delete-a-repository-invitation)
+* [列出经验证用户的仓库邀请](/rest/reference/collaborators#list-repository-invitations-for-the-authenticated-user)
+* [接受仓库邀请](/rest/reference/collaborators#accept-a-repository-invitation)
+* [拒绝仓库邀请](/rest/reference/collaborators#decline-a-repository-invitation)
 
 #### 仓库密钥
 
-* [列出部署密钥](/rest/reference/repos#list-deploy-keys)
-* [创建部署密钥](/rest/reference/repos#create-a-deploy-key)
-* [获取部署密钥](/rest/reference/repos#get-a-deploy-key)
-* [删除部署密钥](/rest/reference/repos#delete-a-deploy-key)
+* [列出部署密钥](/rest/reference/deployments#list-deploy-keys)
+* [创建部署密钥](/rest/reference/deployments#create-a-deploy-key)
+* [获取部署密钥](/rest/reference/deployments#get-a-deploy-key)
+* [删除部署密钥](/rest/reference/deployments#delete-a-deploy-key)
 
 #### 仓库页面
 
-* [获取 GitHub Pages 站点](/rest/reference/repos#get-a-github-pages-site)
-* [创建 GitHub Pages 站点](/rest/reference/repos#create-a-github-pages-site)
-* [更新关于 GitHub Pages 站点的信息](/rest/reference/repos#update-information-about-a-github-pages-site)
-* [删除 GitHub Pages 站点](/rest/reference/repos#delete-a-github-pages-site)
-* [列出 GitHub Pages 构建](/rest/reference/repos#list-github-pages-builds)
-* [请求 GitHub Pages 构建](/rest/reference/repos#request-a-github-pages-build)
-* [获取 GitHub Pages 构建](/rest/reference/repos#get-github-pages-build)
-* [获取最新页面构建](/rest/reference/repos#get-latest-pages-build)
+* [获取 GitHub Pages 站点](/rest/reference/pages#get-a-github-pages-site)
+* [创建 GitHub Pages 站点](/rest/reference/pages#create-a-github-pages-site)
+* [更新关于 GitHub Pages 站点的信息](/rest/reference/pages#update-information-about-a-github-pages-site)
+* [删除 GitHub Pages 站点](/rest/reference/pages#delete-a-github-pages-site)
+* [列出 GitHub Pages 构建](/rest/reference/pages#list-github-pages-builds)
+* [请求 GitHub Pages 构建](/rest/reference/pages#request-a-github-pages-build)
+* [获取 GitHub Pages 构建](/rest/reference/pages#get-github-pages-build)
+* [获取最新页面构建](/rest/reference/pages#get-latest-pages-build)
 
 {% ifversion ghes %}
 #### 仓库预接收挂钩
@@ -783,11 +775,11 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### 仓库统计
 
-* [获取每周提交活动](/rest/reference/repos#get-the-weekly-commit-activity)
-* [获取最近一年的提交活动](/rest/reference/repos#get-the-last-year-of-commit-activity)
-* [获取所有参与者提交活动](/rest/reference/repos#get-all-contributor-commit-activity)
-* [获取每周提交计数](/rest/reference/repos#get-the-weekly-commit-count)
-* [获取每天的每小时提交计数](/rest/reference/repos#get-the-hourly-commit-count-for-each-day)
+* [获取每周提交活动](/rest/reference/repository-metrics#get-the-weekly-commit-activity)
+* [获取最近一年的提交活动](/rest/reference/repository-metrics#get-the-last-year-of-commit-activity)
+* [获取所有参与者提交活动](/rest/reference/repository-metrics#get-all-contributor-commit-activity)
+* [获取每周提交计数](/rest/reference/repository-metrics#get-the-weekly-commit-count)
+* [获取每天的每小时提交计数](/rest/reference/repository-metrics#get-the-hourly-commit-count-for-each-day)
 
 {% ifversion fpt or ghec %}
 #### 仓库漏洞警报
@@ -813,9 +805,9 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 
 #### 状态
 
-* [获取特定引用的组合状态](/rest/reference/repos#get-the-combined-status-for-a-specific-reference)
-* [列出引用的提交状态](/rest/reference/repos#list-commit-statuses-for-a-reference)
-* [创建提交状态](/rest/reference/repos#create-a-commit-status)
+* [获取特定引用的组合状态](/rest/reference/commits#get-the-combined-status-for-a-specific-reference)
+* [列出引用的提交状态](/rest/reference/commits#list-commit-statuses-for-a-reference)
+* [创建提交状态](/rest/reference/commits#create-a-commit-status)
 
 #### 团队讨论
 
@@ -838,10 +830,10 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 {% ifversion fpt or ghec %}
 #### 流量
 
-* [获取仓库克隆](/rest/reference/repos#get-repository-clones)
-* [获取主要推荐途径](/rest/reference/repos#get-top-referral-paths)
-* [获取主要推荐来源](/rest/reference/repos#get-top-referral-sources)
-* [获取页面视图](/rest/reference/repos#get-page-views)
+* [获取仓库克隆](/rest/reference/repository-metrics#get-repository-clones)
+* [获取主要推荐途径](/rest/reference/repository-metrics#get-top-referral-paths)
+* [获取主要推荐来源](/rest/reference/repository-metrics#get-top-referral-sources)
+* [获取页面视图](/rest/reference/repository-metrics#get-page-views)
 {% endif %}
 
 {% ifversion fpt or ghec %}
@@ -925,7 +917,7 @@ curl -H "Authorization: token OAUTH-TOKEN" {% data variables.product.api_url_pre
 * [获取工作流程使用情况](/rest/reference/actions#get-workflow-usage)
 {% endif %}
 
-{% ifversion fpt or ghes > 3.1 or ghae-next or ghec %}
+{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
 
 ## 延伸阅读
 

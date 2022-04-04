@@ -19,7 +19,6 @@ shortTitle: Migrarse desde GitLab IC/DC
 
 {% data reusables.actions.enterprise-beta %}
 {% data reusables.actions.enterprise-github-hosted-runners %}
-{% data reusables.actions.ae-beta %}
 
 ## Introducción
 
@@ -392,7 +391,7 @@ artifacts:
 {% raw %}
 ```yaml
 - name: Upload math result for job 1
-  uses: actions/upload-artifact@v2
+  uses: actions/upload-artifact@v3
   with:
     name: homework
     path: math-homework.txt

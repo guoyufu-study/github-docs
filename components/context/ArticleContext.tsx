@@ -17,15 +17,18 @@ export type ArticleContextT = {
   title: string
   intro: string
   effectiveDate: string
-  renderedPage: string
+  renderedPage: string | JSX.Element[]
   miniTocItems: Array<MiniTocItem>
   contributor: { name: string; URL: string } | null
   permissions?: string
   includesPlatformSpecificContent: boolean
+  includesToolSpecificContent: boolean
   defaultPlatform?: string
+  defaultTool?: string
   product?: string
   currentLearningTrack?: LearningTrack
   detectedPlatforms: Array<string>
+  detectedTools: Array<string>
 }
 
 export const ArticleContext = createContext<ArticleContextT | null>(null)
@@ -60,9 +63,12 @@ export const getArticleContextFromRequest = (req: any): ArticleContextT => {
     contributor: page.contributor || null,
     permissions: page.permissions || '',
     includesPlatformSpecificContent: page.includesPlatformSpecificContent || false,
+    includesToolSpecificContent: page.includesToolSpecificContent || false,
     defaultPlatform: page.defaultPlatform || '',
+    defaultTool: page.defaultTool || '',
     product: page.product || '',
     currentLearningTrack: req.context.currentLearningTrack,
     detectedPlatforms: page.detectedPlatforms || [],
+    detectedTools: page.detectedTools || [],
   }
 }
